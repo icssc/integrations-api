@@ -14,7 +14,7 @@ asana.use(
 );
 
 asana.get(
-	"/action/feedback/form",
+	"/action/feedback/metadata",
 	zValidator(
 		"query",
 		z.object({
