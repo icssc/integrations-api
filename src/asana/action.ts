@@ -4,17 +4,17 @@ import { cors } from "hono/cors";
 import { z } from "zod";
 import { stringToJSON } from "zod_utilz";
 
-const asana = new Hono<{ Bindings: Cloudflare.Env }>();
+const asanaAction = new Hono<{ Bindings: Cloudflare.Env }>();
 
-asana.use(
+asanaAction.use(
 	"*",
 	cors({
 		origin: "https://app.asana.com",
 	}),
 );
 
-asana.get(
-	"/action/feedback/metadata",
+asanaAction.get(
+	"/feedback/metadata",
 	zValidator(
 		"query",
 		z.object({
@@ -55,8 +55,8 @@ asana.get(
 	},
 );
 
-asana.post(
-	"/action/feedback/onsubmit",
+asanaAction.post(
+	"/feedback/onsubmit",
 	zValidator(
 		"json",
 		z.object({
@@ -87,8 +87,8 @@ asana.post(
 	},
 );
 
-asana.post(
-	"/action/feedback/run",
+asanaAction.post(
+	"/feedback/run",
 	zValidator(
 		"json",
 		z.object({
@@ -118,4 +118,4 @@ asana.post(
 	},
 );
 
-export { asana };
+export { asanaAction };
