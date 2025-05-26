@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       hono:
-        specifier: ^4.7.10
+        specifier: 4.7.10
         version: 4.7.10
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
         version: 1.9.4
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^16.0.0
+        specifier: 16.0.0
         version: 16.0.0
       wrangler:
-        specifier: ^4.4.0
+        specifier: 4.16.1
         version: 4.16.1
 
 packages:
