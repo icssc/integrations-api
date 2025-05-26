@@ -83,7 +83,38 @@ asana.post(
 			data.action,
 			data.values.discord_channel_id,
 		);
-		return c.text("");
+		return c.body(null);
+	},
+);
+
+asana.post(
+	"/action/feedback/run",
+	zValidator(
+		"json",
+		z.object({
+			data: stringToJSON().pipe(
+				z.object({
+					expires_at: z.coerce.date().optional(),
+					user: z.number().optional(),
+					workspace: z.number().optional(),
+					project: z.number().optional(),
+					target_object: z.number().optional(),
+					action: z.string(),
+					action_type: z.string().optional(),
+					idempotency_key: z.string(),
+				}),
+			),
+		}),
+	),
+	async (c) => {
+		const action = c.req.valid("json").data.action;
+
+		console.log(c.req.valid("json").data.target_object);
+		console.log(await c.env.ASANA_DISCORD_CHANNEL_MAP.get(action));
+
+		return c.json({
+			action_result: "ok",
+		});
 	},
 );
 
