@@ -2,19 +2,19 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "integrations-api",
 	"main": "src/index.ts",
-	"compatibility_date": "2025-05-26"
+	"compatibility_date": "2025-05-26",
 	// "compatibility_flags": [
 	//   "nodejs_compat"
 	// ],
-	// "vars": {
-	//   "MY_VAR": "my-variable"
-	// },
-	// "kv_namespaces": [
-	//   {
-	//     "binding": "MY_KV_NAMESPACE",
-	//     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-	//   }
-	// ],
+	"vars": {
+		"BASE_URL": "http://localhost:8787"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "ASANA_DISCORD_CHANNEL_MAP",
+			"id": "d6a10519939a4bacbca1c10dc5a8ac9d"
+		}
+	]
 	// "r2_buckets": [
 	//   {
 	//     "binding": "MY_BUCKET",

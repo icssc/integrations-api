@@ -8,9 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@hono/zod-validator':
+        specifier: 0.5.0
+        version: 0.5.0(hono@4.7.10)(zod@3.25.28)
       hono:
         specifier: 4.7.10
         version: 4.7.10
+      zod:
+        specifier: 3.25.28
+        version: 3.25.28
+      zod_utilz:
+        specifier: 0.8.4
+        version: 0.8.4(typescript@5.8.3)(zod@3.25.28)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -283,6 +292,12 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
+
+  '@hono/zod-validator@0.5.0':
+    resolution: {integrity: sha512-ds5bW6DCgAnNHP33E3ieSbaZFd5dkV52ZjyaXtGoR06APFrCtzAsKZxTHwOrJNBdXsi0e5wNwo5L4nVEVnJUdg==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -683,6 +698,11 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
 
@@ -734,6 +754,15 @@ packages:
 
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
+
+  zod@3.25.28:
+    resolution: {integrity: sha512-/nt/67WYKnr5by3YS7LroZJbtcCBurDKKPBPWWzaxvVCGuG/NOsiKkrjoOhI8mJ+SQUXEbUzeB3S+6XDUEEj7Q==}
+
+  zod_utilz@0.8.4:
+    resolution: {integrity: sha512-roxu+9Y+rlJ7xLT/XPD9GUD3X26tgCydyz4ZOWG0WZirAYpxo6hWSOl7SsGzbs1JzAgX1yCSHf24rdweVM/xcQ==}
+    peerDependencies:
+      typescript: ^5.0.0
+      zod: ^3.22.4
 
 snapshots:
 
@@ -882,6 +911,11 @@ snapshots:
     optional: true
 
   '@fastify/busboy@2.1.1': {}
+
+  '@hono/zod-validator@0.5.0(hono@4.7.10)(zod@3.25.28)':
+    dependencies:
+      hono: 4.7.10
+      zod: 3.25.28
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
@@ -1262,6 +1296,8 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
+  typescript@5.8.3: {}
+
   ufo@1.6.1: {}
 
   undici@5.29.0:
@@ -1318,3 +1354,10 @@ snapshots:
       stacktracey: 2.1.8
 
   zod@3.22.3: {}
+
+  zod@3.25.28: {}
+
+  zod_utilz@0.8.4(typescript@5.8.3)(zod@3.25.28):
+    dependencies:
+      typescript: 5.8.3
+      zod: 3.25.28
