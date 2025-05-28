@@ -4,6 +4,7 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
+	ChannelType,
 	Routes,
 } from "discord.js";
 import { Hono } from "hono";
@@ -131,7 +132,7 @@ asanaAction.post(
 		}
 
 		const messageResponse = await fetch(
-			`https://app.asana.com/api/1.0/tasks/${taskId}`,
+			`https://app.asana.com/api/1.0/tasks/${taskId}?opt_fields=custom_fields,notes,permalink_url`,
 			{
 				headers: {
 					Authorization: `Bearer ${c.env.ASANA_BEARER}`,
@@ -150,6 +151,12 @@ asanaAction.post(
 
 		const MessageSchema = z.object({
 			data: z.object({
+				custom_fields: z.array(
+					z.object({
+						gid: z.string(),
+						display_value: z.union([z.string(), z.null()]),
+					}),
+				),
 				notes: z.string(),
 				permalink_url: z.string(),
 			}),
@@ -166,10 +173,49 @@ asanaAction.post(
 			);
 		}
 
+		const submissionType = message.data.data.custom_fields.find(
+			({ gid }) => gid === "1208889653506741",
+		)?.display_value;
+		const submissionFollowupText = message.data.data.custom_fields.find(
+			({ gid }) => gid === "1209029669147649",
+		)?.display_value;
+		const submissionMessage = message.data.data.custom_fields.find(
+			({ gid }) => gid === "1209029669147647",
+		)?.display_value;
+		const submissionName = message.data.data.custom_fields.find(
+			({ gid }) => gid === "1208889653506818",
+		)?.display_value;
+
+		if (
+			!submissionType ||
+			!submissionFollowupText ||
+			!submissionMessage ||
+			!submissionName
+		) {
+			return c.json(
+				{
+					error: "Missing custom Asana field.",
+				},
+				500,
+			);
+		}
+
+		const submissionFollowup = submissionFollowupText === "Yes";
+
 		const messageNoFormLink =
 			message.data.data.notes.split("———————————————")[0];
 
 		try {
+			const threadChannel = await client.post(Routes.threads(channelId), {
+				body: {
+					name: `[${submissionType}] ${submissionFollowup ? "[Followup]" : ""} ${submissionName}`,
+					auto_archive_duration: 10080,
+					type: ChannelType.PublicThread,
+				},
+			});
+			const { id: threadChannelId } = z
+				.object({ id: z.string() })
+				.parse(threadChannel);
 			const discordButton = new ButtonBuilder()
 				.setLabel("Asana Task")
 				.setURL(message.data.data.permalink_url)
@@ -177,7 +223,7 @@ asanaAction.post(
 			const discordActionRow = new ActionRowBuilder().addComponents(
 				discordButton,
 			);
-			await client.post(Routes.channelMessages(channelId), {
+			await client.post(Routes.channelMessages(threadChannelId), {
 				body: {
 					content: messageNoFormLink,
 					components: [discordActionRow.toJSON()],
