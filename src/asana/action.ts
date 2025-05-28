@@ -1,4 +1,11 @@
+import { getRestClient } from "@/lib/discord/getRestClient";
 import { zValidator } from "@hono/zod-validator";
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	Routes,
+} from "discord.js";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
@@ -109,8 +116,82 @@ asanaAction.post(
 	async (c) => {
 		const action = c.req.valid("json").data.action;
 
-		console.log(c.req.valid("json").data.target_object);
-		console.log(await c.env.ASANA_DISCORD_CHANNEL_MAP.get(action));
+		const taskId = c.req.valid("json").data.target_object;
+		const channelId = await c.env.ASANA_DISCORD_CHANNEL_MAP.get(action);
+
+		const client = getRestClient(c.env.DISCORD_TOKEN);
+
+		if (!channelId) {
+			return c.json(
+				{
+					error: "Could not retrieve Discord Channel ID.",
+				},
+				500,
+			);
+		}
+
+		const messageResponse = await fetch(
+			`https://app.asana.com/api/1.0/tasks/${taskId}`,
+			{
+				headers: {
+					Authorization: `Bearer ${c.env.ASANA_BEARER}`,
+				},
+			},
+		);
+
+		if (!messageResponse.ok) {
+			return c.json(
+				{
+					error: `Could not retrieve Asana task details: ${taskId} (${messageResponse.status})`,
+				},
+				500,
+			);
+		}
+
+		const MessageSchema = z.object({
+			data: z.object({
+				notes: z.string(),
+				permalink_url: z.string(),
+			}),
+		});
+
+		const message = MessageSchema.safeParse(await messageResponse.json());
+
+		if (message.error) {
+			return c.json(
+				{
+					error: "Could not parse Asana task details.",
+				},
+				500,
+			);
+		}
+
+		const messageNoFormLink =
+			message.data.data.notes.split("———————————————")[0];
+
+		try {
+			const discordButton = new ButtonBuilder()
+				.setLabel("Asana Task")
+				.setURL(message.data.data.permalink_url)
+				.setStyle(ButtonStyle.Link);
+			const discordActionRow = new ActionRowBuilder().addComponents(
+				discordButton,
+			);
+			await client.post(Routes.channelMessages(channelId), {
+				body: {
+					content: messageNoFormLink,
+					components: [discordActionRow.toJSON()],
+				},
+			});
+		} catch (e) {
+			console.error(e);
+			return c.json(
+				{
+					error: "Failed to send Discord message with error.",
+				},
+				500,
+			);
+		}
 
 		return c.json({
 			action_result: "ok",

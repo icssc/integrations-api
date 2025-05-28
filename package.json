@@ -8,12 +8,14 @@
 	},
 	"dependencies": {
 		"@hono/zod-validator": "0.5.0",
+		"discord.js": "^14.19.3",
 		"hono": "4.7.10",
 		"zod": "3.25.28",
 		"zod_utilz": "0.8.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@types/node": "22.15.24",
 		"husky": "9.1.7",
 		"lint-staged": "16.0.0",
 		"wrangler": "4.16.1"
