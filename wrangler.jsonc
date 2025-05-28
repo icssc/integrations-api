@@ -32,5 +32,11 @@
 	"observability": {
 		"enabled": true,
 		"head_sampling_rate": 1
-	}
+	},
+	"routes": [
+		{
+			"pattern": "integrations.icssc.club",
+			"custom_domain": true
+		}
+	]
 }
