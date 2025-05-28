@@ -12,7 +12,7 @@
 			"binding": "ASANA_DISCORD_CHANNEL_MAP",
 			"id": "d6a10519939a4bacbca1c10dc5a8ac9d"
 		}
-	]
+	],
 	// "r2_buckets": [
 	//   {
 	//     "binding": "MY_BUCKET",
@@ -29,8 +29,8 @@
 	// "ai": {
 	//   "binding": "AI"
 	// },
-	// "observability": {
-	//   "enabled": true,
-	//   "head_sampling_rate": 1
-	// }
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	}
 }
